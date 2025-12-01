@@ -39,8 +39,8 @@ const Leistungen = () => {
   return (
     <>
       <SchemaMarkup 
-        title="Unsere Leistungen"
-        description="Umfassende hausärztliche Versorgung: Allgemeinmedizin, Vorsorge, Impfungen, Chronikerbetreuung, Labor und Hausbesuche - Ihre Gesundheit in besten Händen."
+        title="Unsere Leistungen - Hausarztpraxis Dr. Ismail"
+        description="Hausärztliche Leistungen: Allgemeinmedizin, Vorsorge, Impfungen, Chronikerbetreuung, Labor und Hausbesuche in Münster"
       />
       
       <div className="container mx-auto px-4 py-16">
@@ -86,24 +86,25 @@ const Leistungen = () => {
             </CardHeader>
             <CardContent className="space-y-4">
               <div>
-                <h3 className="font-semibold mb-2">Sprechzeiten</h3>
+                <h3 className="font-semibold mb-2">Sprechzeiten ⏰</h3>
                 <p className="text-muted-foreground">
-                  Montag bis Freitag: 08:00 - 18:00 Uhr<br />
+                  Mo, Di, Do, Fr: 08:00-12:00 & 15:00-18:00 Uhr<br />
+                  Mi: 08:00-12:00 Uhr<br />
                   Termine nach Vereinbarung
                 </p>
               </div>
               <div>
-                <h3 className="font-semibold mb-2">Notfälle</h3>
+                <h3 className="font-semibold mb-2">Notfälle 🚨</h3>
                 <p className="text-muted-foreground">
-                  Bei akuten medizinischen Notfällen rufen Sie bitte die 112 an oder
-                  wenden Sie sich an den ärztlichen Bereitschaftsdienst unter 116 117.
+                  Bei akuten Notfällen: 112<br />
+                  Ärztlicher Bereitschaftsdienst: 116 117
                 </p>
               </div>
               <div>
-                <h3 className="font-semibold mb-2">Kassenleistungen</h3>
+                <h3 className="font-semibold mb-2">Kassenleistungen 💳</h3>
                 <p className="text-muted-foreground">
-                  Wir sind eine Kassenarztpraxis und behandeln Patienten aller gesetzlichen
-                  und privaten Krankenkassen. Bitte bringen Sie Ihre Versichertenkarte zum Termin mit.
+                  Kassenarztpraxis - alle gesetzlichen und privaten Krankenkassen.
+                  Bitte Versichertenkarte mitbringen.
                 </p>
               </div>
             </CardContent>
