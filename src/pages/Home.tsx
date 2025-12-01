@@ -59,8 +59,8 @@ const Home = () => {
   return (
     <>
       <SchemaMarkup 
-        title="Digitale Hausarztpraxis & Terminportal"
-        description="Moderne digitale Hausarztpraxis mit Online-Terminbuchung, Videosprechstunde und digitaler Patientenbetreuung. Ihre Gesundheit, digital und sicher."
+        title="Hausarztpraxis Dr. Ismail - Münster"
+        description="Hausarztpraxis Dr. Ismail in Münster: Online-Terminbuchung, moderne medizinische Versorgung. Ostmarkstraße 56, 48145 Münster. Tel: 0251/246624"
       />
       
       {/* Hero Section */}
@@ -69,13 +69,13 @@ const Home = () => {
         <div className="container relative mx-auto px-4">
           <div className="mx-auto max-w-3xl text-center">
             <h1 className="mb-6 text-4xl font-bold text-white md:text-6xl animate-fade-in">
-              HausarztAI.de
+              Hausarztpraxis Dr. Ismail
             </h1>
             <p className="mb-4 text-xl text-white/90 md:text-2xl animate-fade-in" style={{ animationDelay: "0.1s" }}>
-              Ihre digitale Hausarztpraxis
+              Moderne medizinische Versorgung in Münster 🏥
             </p>
             <p className="mb-8 text-lg text-white/80 animate-fade-in" style={{ animationDelay: "0.2s" }}>
-              Moderne Terminplanung. Digitale Kommunikation. Medizinische Betreuung.
+              Online-Terminbuchung • Persönliche Betreuung • Moderne Diagnostik
             </p>
             <div className="flex flex-col sm:flex-row gap-4 justify-center animate-fade-in" style={{ animationDelay: "0.3s" }}>
               <Link to="/termin">

@@ -1,7 +1,9 @@
 import { useState } from "react";
 import { Link, useLocation } from "react-router-dom";
-import { Menu, X, Calendar, User, Phone } from "lucide-react";
+import { Menu, X, Calendar, User } from "lucide-react";
 import { Button } from "./ui/button";
+import { ThemeToggle } from "./ThemeToggle";
+import logo from "@/assets/logo.png";
 
 const Header = () => {
   const [isMenuOpen, setIsMenuOpen] = useState(false);
@@ -17,14 +19,15 @@ const Header = () => {
   ];
 
   return (
-    <header className="sticky top-0 z-50 w-full border-b border-border bg-background/95 backdrop-blur supports-[backdrop-filter]:bg-background/60">
+    <header className="sticky top-0 z-50 w-full border-b border-border bg-background/95 backdrop-blur supports-[backdrop-filter]:bg-background/80 transition-smooth">
       <div className="container mx-auto px-4">
         <div className="flex h-16 items-center justify-between">
-          <Link to="/" className="flex items-center space-x-2">
-            <div className="flex h-10 w-10 items-center justify-center rounded-lg medical-gradient">
-              <span className="text-xl font-bold text-white">H</span>
+          <Link to="/" className="flex items-center space-x-3 hover-scale">
+            <img src={logo} alt="Hausarztpraxis Dr. Ismail Logo" className="h-10 w-10 rounded-lg" />
+            <div className="flex flex-col">
+              <span className="text-lg font-bold text-primary leading-tight">Hausarztpraxis</span>
+              <span className="text-sm font-semibold text-secondary leading-tight">Dr. Ismail</span>
             </div>
-            <span className="text-xl font-bold text-primary">HausarztAI.de</span>
           </Link>
 
           {/* Desktop Navigation */}
@@ -33,25 +36,27 @@ const Header = () => {
               <Link
                 key={link.path}
                 to={link.path}
-                className={`text-sm font-medium transition-colors hover:text-primary ${
+                className={`text-sm font-medium transition-smooth hover:text-primary relative group ${
                   isActive(link.path) ? "text-primary" : "text-foreground/70"
                 }`}
               >
                 {link.label}
+                <span className={`absolute -bottom-1 left-0 w-0 h-0.5 bg-primary transition-all group-hover:w-full ${isActive(link.path) ? 'w-full' : ''}`}></span>
               </Link>
             ))}
           </nav>
 
           {/* Desktop CTA Buttons */}
-          <div className="hidden md:flex items-center space-x-3">
+          <div className="hidden md:flex items-center space-x-2">
+            <ThemeToggle />
             <Link to="/login">
-              <Button variant="ghost" size="sm">
+              <Button variant="ghost" size="sm" className="transition-smooth">
                 <User className="mr-2 h-4 w-4" />
-                Login
+                Anmelden
               </Button>
             </Link>
             <Link to="/termin">
-              <Button size="sm" className="medical-gradient">
+              <Button size="sm" className="medical-gradient hover-scale">
                 <Calendar className="mr-2 h-4 w-4" />
                 Termin buchen
               </Button>
@@ -59,27 +64,30 @@ const Header = () => {
           </div>
 
           {/* Mobile Menu Button */}
-          <button
-            className="md:hidden"
-            onClick={() => setIsMenuOpen(!isMenuOpen)}
-            aria-label="Toggle menu"
-          >
-            {isMenuOpen ? (
-              <X className="h-6 w-6 text-foreground" />
-            ) : (
-              <Menu className="h-6 w-6 text-foreground" />
-            )}
-          </button>
+          <div className="flex md:hidden items-center space-x-2">
+            <ThemeToggle />
+            <button
+              className="md:hidden"
+              onClick={() => setIsMenuOpen(!isMenuOpen)}
+              aria-label="Menü öffnen/schließen"
+            >
+              {isMenuOpen ? (
+                <X className="h-6 w-6 text-foreground" />
+              ) : (
+                <Menu className="h-6 w-6 text-foreground" />
+              )}
+            </button>
+          </div>
         </div>
 
         {/* Mobile Navigation */}
         {isMenuOpen && (
-          <nav className="md:hidden border-t border-border py-4 space-y-3 animate-fade-in">
+          <nav className="md:hidden border-t border-border py-4 space-y-3 animate-slide-up">
             {navLinks.map((link) => (
               <Link
                 key={link.path}
                 to={link.path}
-                className={`block py-2 text-sm font-medium transition-colors hover:text-primary ${
+                className={`block py-2 text-sm font-medium transition-smooth hover:text-primary ${
                   isActive(link.path) ? "text-primary" : "text-foreground/70"
                 }`}
                 onClick={() => setIsMenuOpen(false)}
@@ -91,7 +99,7 @@ const Header = () => {
               <Link to="/login" onClick={() => setIsMenuOpen(false)}>
                 <Button variant="outline" className="w-full">
                   <User className="mr-2 h-4 w-4" />
-                  Login
+                  Anmelden
                 </Button>
               </Link>
               <Link to="/termin" onClick={() => setIsMenuOpen(false)}>

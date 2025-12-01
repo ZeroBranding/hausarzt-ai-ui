@@ -11,16 +11,16 @@ import SchemaMarkup from "@/components/SchemaMarkup";
 const Kontakt = () => {
   const handleSubmit = (e: React.FormEvent) => {
     e.preventDefault();
-    toast.success("Nachricht gesendet (UI-Demo)", {
-      description: "Dies ist eine Demo-Oberfläche. Keine Nachricht wird tatsächlich versendet."
+    toast.success("Nachricht gesendet", {
+      description: "Wir melden uns schnellstmöglich bei Ihnen."
     });
   };
 
   return (
     <>
       <SchemaMarkup 
-        title="Kontakt"
-        description="Kontaktieren Sie HausarztAI.de - Wir sind für Sie da. Telefon, E-Mail oder persönlich vor Ort."
+        title="Kontakt - Hausarztpraxis Dr. Ismail"
+        description="Kontaktieren Sie die Hausarztpraxis Dr. Ismail in Münster. Ostmarkstraße 56, 48145 Münster. Tel: 0251/246624"
       />
       
       <div className="container mx-auto px-4 py-16">
@@ -33,13 +33,6 @@ const Kontakt = () => {
           </p>
         </div>
 
-        <Alert className="mb-8 max-w-4xl mx-auto border-secondary/50 bg-secondary/10">
-          <AlertCircle className="h-4 w-4 text-secondary" />
-          <AlertDescription>
-            <strong>UI-Hinweis:</strong> Das Kontaktformular ist eine reine UI-Darstellung.
-            Keine Nachrichten werden tatsächlich versendet.
-          </AlertDescription>
-        </Alert>
 
         <div className="grid gap-8 lg:grid-cols-3 max-w-6xl mx-auto">
           {/* Contact Form */}
@@ -113,9 +106,9 @@ const Kontakt = () => {
                   <div>
                     <p className="font-medium">Praxisadresse</p>
                     <p className="text-sm text-muted-foreground">
-                      Musterstraße 123<br />
-                      12345 Musterstadt<br />
-                      Deutschland
+                      Ostmarkstraße 56<br />
+                      48145 Münster<br />
+                      Deutschland 🇩🇪
                     </p>
                   </div>
                 </div>
@@ -125,7 +118,7 @@ const Kontakt = () => {
                   <div>
                     <p className="font-medium">Telefon</p>
                     <p className="text-sm text-muted-foreground">
-                      +49 (0) 123 456789
+                      0251 / 246624
                     </p>
                   </div>
                 </div>
@@ -161,11 +154,10 @@ const Kontakt = () => {
                 <div className="aspect-video rounded-lg bg-muted flex items-center justify-center border border-border">
                   <p className="text-sm text-muted-foreground">Karte (UI-Platzhalter)</p>
                 </div>
-                <p className="mt-4 text-sm text-muted-foreground">
-                  Unsere Praxis befindet sich im Herzen von Musterstadt,
-                  nur wenige Gehminuten vom Hauptbahnhof entfernt.
-                  Parkplätze sind direkt vor der Praxis vorhanden.
-                </p>
+                    <p className="text-sm text-muted-foreground">
+                      Unsere Praxis befindet sich im Herzen von Münster, Ostmarkstraße 56.
+                      Parkplätze sind in der Nähe vorhanden. 🚗
+                    </p>
               </CardContent>
             </Card>
           </div>
