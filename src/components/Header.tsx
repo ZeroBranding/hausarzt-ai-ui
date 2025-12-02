@@ -12,18 +12,18 @@ const Header = () => {
   const isActive = (path: string) => location.pathname === path;
 
   const navLinks = [
-    { path: "/", label: "Startseite" },
-    { path: "/leistungen", label: "Leistungen" },
-    { path: "/termin", label: "Termin buchen" },
-    { path: "/kontakt", label: "Kontakt" },
+    { path: "/", label: "🏠 Startseite" },
+    { path: "/leistungen", label: "⚕️ Leistungen" },
+    { path: "/termin", label: "📅 Termin buchen" },
+    { path: "/kontakt", label: "📞 Kontakt" },
   ];
 
   return (
     <header className="sticky top-0 z-50 w-full border-b border-border bg-background/95 backdrop-blur supports-[backdrop-filter]:bg-background/80 transition-smooth">
       <div className="container mx-auto px-4">
         <div className="flex h-16 items-center justify-between">
-          <Link to="/" className="flex items-center space-x-3 hover-scale">
-            <img src={logo} alt="Hausarztpraxis Dr. Ismail Logo" className="h-10 w-10 rounded-lg" />
+          <Link to="/" className="flex items-center space-x-3 hover-scale group">
+            <img src={logo} alt="Hausarztpraxis Dr. Ismail Logo" className="h-12 w-12 rounded-lg transition-transform group-hover:rotate-6" />
             <div className="flex flex-col">
               <span className="text-lg font-bold text-primary leading-tight">Hausarztpraxis</span>
               <span className="text-sm font-semibold text-secondary leading-tight">Dr. Ismail</span>
@@ -50,15 +50,15 @@ const Header = () => {
           <div className="hidden md:flex items-center space-x-2">
             <ThemeToggle />
             <Link to="/login">
-              <Button variant="ghost" size="sm" className="transition-smooth">
+              <Button variant="ghost" size="sm" className="transition-smooth hover-scale">
                 <User className="mr-2 h-4 w-4" />
-                Anmelden
+                🔐 Anmelden
               </Button>
             </Link>
             <Link to="/termin">
-              <Button size="sm" className="medical-gradient hover-scale">
+              <Button size="sm" className="medical-gradient hover-scale shadow-medium">
                 <Calendar className="mr-2 h-4 w-4" />
-                Termin buchen
+                📅 Termin buchen
               </Button>
             </Link>
           </div>
@@ -97,15 +97,15 @@ const Header = () => {
             ))}
             <div className="pt-3 space-y-2">
               <Link to="/login" onClick={() => setIsMenuOpen(false)}>
-                <Button variant="outline" className="w-full">
+                <Button variant="outline" className="w-full hover-scale">
                   <User className="mr-2 h-4 w-4" />
-                  Anmelden
+                  🔐 Anmelden
                 </Button>
               </Link>
               <Link to="/termin" onClick={() => setIsMenuOpen(false)}>
-                <Button className="w-full medical-gradient">
+                <Button className="w-full medical-gradient hover-scale shadow-medium">
                   <Calendar className="mr-2 h-4 w-4" />
-                  Termin buchen
+                  📅 Termin buchen
                 </Button>
               </Link>
             </div>
