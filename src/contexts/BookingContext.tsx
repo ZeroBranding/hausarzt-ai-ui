@@ -1,5 +1,5 @@
 import React, { createContext, useContext, useReducer, useEffect, ReactNode } from 'react';
-import { apiUtils } from '@/lib/api';
+import { apiUtils } from '@/lib_api';
 
 // Types
 export interface BookingState {
