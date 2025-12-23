@@ -6,7 +6,7 @@ import path from "path";
 export default defineConfig(() => ({
   server: {
     host: "127.0.0.1",
-    port: 3000,
+    port: 8080,
     // Proxy API-Anfragen zum Backend (vermeidet CORS-Probleme)
     proxy: {
       '/api': {

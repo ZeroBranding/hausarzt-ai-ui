@@ -4,7 +4,7 @@ import { Button } from "@/components/ui/button";
 import { Calendar, MessageSquare, User, FileText, Clock, AlertCircle, Loader2, CheckCircle, XCircle } from "lucide-react";
 import { Alert, AlertDescription } from "@/components/ui/alert";
 import SchemaMarkup from "@/components/SchemaMarkup";
-import { appointmentsAPI, messagesAPI, authAPI, apiUtils } from "@/lib/api";
+import { appointmentsAPI, messagesAPI, authAPI, apiUtils } from "@/lib_api";
 import { useTenant } from "@/contexts/TenantContext";
 
 const Patientenbereich = () => {
