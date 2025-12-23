@@ -1,8 +1,11 @@
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
 import { Heart, Stethoscope, Syringe, Activity, FlaskConical, Users } from "lucide-react";
 import SchemaMarkup from "@/components/SchemaMarkup";
+import { useTenant } from "@/contexts/TenantContext";
 
 const Leistungen = () => {
+  const { tenant } = useTenant();
+
   const services = [
     {
       icon: Stethoscope,
@@ -39,8 +42,8 @@ const Leistungen = () => {
   return (
     <>
       <SchemaMarkup 
-        title="Unsere Leistungen - Hausarztpraxis Dr. Ismail"
-        description="Hausärztliche Leistungen: Allgemeinmedizin, Vorsorge, Impfungen, Chronikerbetreuung, Labor und Hausbesuche in Münster"
+        title="Unsere Leistungen"
+        description="Hausärztliche Leistungen: Allgemeinmedizin, Vorsorge, Impfungen, Chronikerbetreuung, Labor und Hausbesuche."
       />
       
       <div className="container mx-auto px-4 py-16">
@@ -86,22 +89,20 @@ const Leistungen = () => {
             </CardHeader>
             <CardContent className="space-y-4">
               <div>
-                <h3 className="font-semibold mb-2">Sprechzeiten ⏰</h3>
+                <h3 className="font-semibold mb-2">Sprechzeiten</h3>
                 <p className="text-muted-foreground">
-                  Mo, Di, Do, Fr: 08:00-12:00 & 15:00-18:00 Uhr<br />
-                  Mi: 08:00-12:00 Uhr<br />
-                  Termine nach Vereinbarung
+                  Aktuelle Sprechzeiten und Verfügbarkeit finden Sie in der Online-Terminbuchung.
                 </p>
               </div>
               <div>
-                <h3 className="font-semibold mb-2">Notfälle 🚨</h3>
+                <h3 className="font-semibold mb-2">Notfälle</h3>
                 <p className="text-muted-foreground">
                   Bei akuten Notfällen: 112<br />
                   Ärztlicher Bereitschaftsdienst: 116 117
                 </p>
               </div>
               <div>
-                <h3 className="font-semibold mb-2">Kassenleistungen 💳</h3>
+                <h3 className="font-semibold mb-2">Kassenleistungen</h3>
                 <p className="text-muted-foreground">
                   Kassenarztpraxis - alle gesetzlichen und privaten Krankenkassen.
                   Bitte Versichertenkarte mitbringen.

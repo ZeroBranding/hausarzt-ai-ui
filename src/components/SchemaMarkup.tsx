@@ -1,5 +1,6 @@
 import { useEffect } from "react";
 import { useLocation } from "react-router-dom";
+import { useTenant } from "@/contexts/TenantContext";
 
 interface SchemaMarkupProps {
   title: string;
@@ -8,10 +9,15 @@ interface SchemaMarkupProps {
 
 const SchemaMarkup = ({ title, description }: SchemaMarkupProps) => {
   const location = useLocation();
+  const { tenant, branding } = useTenant();
 
   useEffect(() => {
+    const siteUrl = window.location.origin;
+    const orgName = tenant?.practice_name || title || "GCZ";
+    const pageTitle = branding?.schema_title || title || "GCZ";
+
     // Update page title
-    document.title = `${title} - HausarztAI.de`;
+    document.title = pageTitle;
 
     // Update meta description
     let metaDescription = document.querySelector('meta[name="description"]');
@@ -20,7 +26,7 @@ const SchemaMarkup = ({ title, description }: SchemaMarkupProps) => {
       metaDescription.setAttribute("name", "description");
       document.head.appendChild(metaDescription);
     }
-    metaDescription.setAttribute("content", description);
+    metaDescription.setAttribute("content", branding?.description || description);
 
     // Create breadcrumb list
     const pathSegments = location.pathname.split("/").filter(Boolean);
@@ -32,13 +38,13 @@ const SchemaMarkup = ({ title, description }: SchemaMarkupProps) => {
           "@type": "ListItem",
           "position": 1,
           "name": "Startseite",
-          "item": "https://www.hausarztai.de"
+          "item": siteUrl
         },
         ...pathSegments.map((segment, index) => ({
           "@type": "ListItem",
           "position": index + 2,
           "name": segment.charAt(0).toUpperCase() + segment.slice(1),
-          "item": `https://www.hausarztai.de/${pathSegments.slice(0, index + 1).join("/")}`
+          "item": `${siteUrl}/${pathSegments.slice(0, index + 1).join("/")}`
         }))
       ]
     };
@@ -47,27 +53,19 @@ const SchemaMarkup = ({ title, description }: SchemaMarkupProps) => {
     const organizationSchema = {
       "@context": "https://schema.org",
       "@type": "MedicalOrganization",
-      "name": "HausarztAI.de",
-      "url": "https://www.hausarztai.de",
-      "logo": "https://www.hausarztai.de/logo.png",
-      "description": "Moderne digitale Hausarztpraxis mit Online-Terminbuchung und digitaler Patientenbetreuung",
-      "address": {
-        "@type": "PostalAddress",
-        "streetAddress": "Musterstraße 123",
-        "addressLocality": "Musterstadt",
-        "postalCode": "12345",
-        "addressCountry": "DE"
-      },
-      "telephone": "+49-123-456789",
-      "email": "info@hausarztai.de",
-      "openingHoursSpecification": [
-        {
-          "@type": "OpeningHoursSpecification",
-          "dayOfWeek": ["Monday", "Tuesday", "Wednesday", "Thursday", "Friday"],
-          "opens": "08:00",
-          "closes": "18:00"
-        }
-      ],
+      "name": orgName,
+      "url": siteUrl,
+      "logo": `${siteUrl}/favicon.svg`,
+      "description": branding?.description || description,
+      "address": tenant?.address
+        ? {
+            "@type": "PostalAddress",
+            "streetAddress": tenant.address,
+            "addressCountry": "DE"
+          }
+        : undefined,
+      "telephone": tenant?.phone || undefined,
+      "email": tenant?.email || undefined,
       "sameAs": []
     };
 
@@ -75,12 +73,12 @@ const SchemaMarkup = ({ title, description }: SchemaMarkupProps) => {
     const websiteSchema = {
       "@context": "https://schema.org",
       "@type": "WebSite",
-      "name": "HausarztAI.de",
-      "url": "https://www.hausarztai.de",
-      "description": description,
+      "name": orgName,
+      "url": siteUrl,
+      "description": branding?.description || description,
       "publisher": {
         "@type": "Organization",
-        "name": "HausarztAI.de"
+        "name": orgName
       }
     };
 
@@ -101,7 +99,7 @@ const SchemaMarkup = ({ title, description }: SchemaMarkupProps) => {
       const schemas = document.querySelectorAll('script[type="application/ld+json"]');
       schemas.forEach(schema => schema.remove());
     };
-  }, [title, description, location]);
+  }, [title, description, location, tenant, branding]);
 
   return null;
 };

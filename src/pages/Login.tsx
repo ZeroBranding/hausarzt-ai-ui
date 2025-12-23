@@ -1,25 +1,45 @@
 import { useState } from "react";
-import { Link } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
-import { LogIn, AlertCircle } from "lucide-react";
+import { LogIn, AlertCircle, Loader2 } from "lucide-react";
 import { Alert, AlertDescription } from "@/components/ui/alert";
 import { toast } from "sonner";
 import SchemaMarkup from "@/components/SchemaMarkup";
+import { authAPI } from "@/lib/api";
 
 const Login = () => {
+  const navigate = useNavigate();
+  const [isLoading, setIsLoading] = useState(false);
   const [formData, setFormData] = useState({
     email: "",
     password: ""
   });
 
-  const handleSubmit = (e: React.FormEvent) => {
+  const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
-    toast.success("Login erfolgreich (UI-Demo)", {
-      description: "Dies ist eine Demo-Oberfläche. Keine echte Anmeldung findet statt."
-    });
+    setIsLoading(true);
+
+    try {
+      await authAPI.login({
+        email: formData.email,
+        password: formData.password,
+      });
+
+      toast.success("Login erfolgreich!", {
+        description: "Sie werden zum Dashboard weitergeleitet."
+      });
+      navigate("/dashboard");
+    } catch (error) {
+      console.error("Login error:", error);
+      toast.error("Login fehlgeschlagen", {
+        description: error instanceof Error ? error.message : "Ungültige Anmeldedaten"
+      });
+    } finally {
+      setIsLoading(false);
+    }
   };
 
   const handleChange = (field: string, value: string) => {
@@ -30,7 +50,7 @@ const Login = () => {
     <>
       <SchemaMarkup 
         title="Login"
-        description="Melden Sie sich in Ihrem Patientenkonto bei HausarztAI.de an und verwalten Sie Ihre Termine und Gesundheitsdaten."
+        description="Melden Sie sich in Ihrem Patientenkonto an und verwalten Sie Ihre Termine und Gesundheitsdaten."
       />
       
       <div className="container mx-auto px-4 py-16">
@@ -45,13 +65,6 @@ const Login = () => {
             </p>
           </div>
 
-          <Alert className="mb-6 border-secondary/50 bg-secondary/10">
-            <AlertCircle className="h-4 w-4 text-secondary" />
-            <AlertDescription>
-              <strong>UI-Hinweis:</strong> Dies ist ein UI-Modell. Keine echte Anmeldung findet statt.
-              Diese Oberfläche dient nur zur Demonstration.
-            </AlertDescription>
-          </Alert>
 
           <Card className="shadow-medium">
             <CardHeader>
@@ -94,9 +107,13 @@ const Login = () => {
                   />
                 </div>
 
-                <Button type="submit" className="w-full medical-gradient" size="lg">
-                  <LogIn className="mr-2 h-5 w-5" />
-                  Anmelden
+                <Button type="submit" className="w-full medical-gradient" size="lg" disabled={isLoading}>
+                  {isLoading ? (
+                    <Loader2 className="mr-2 h-5 w-5 animate-spin" />
+                  ) : (
+                    <LogIn className="mr-2 h-5 w-5" />
+                  )}
+                  {isLoading ? "Anmeldung läuft..." : "Anmelden"}
                 </Button>
 
                 <p className="text-center text-sm text-muted-foreground">

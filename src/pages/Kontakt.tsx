@@ -7,8 +7,11 @@ import { Mail, Phone, MapPin, Clock, AlertCircle } from "lucide-react";
 import { Alert, AlertDescription } from "@/components/ui/alert";
 import { toast } from "sonner";
 import SchemaMarkup from "@/components/SchemaMarkup";
+import { useTenant } from "@/contexts/TenantContext";
 
 const Kontakt = () => {
+  const { tenant } = useTenant();
+
   const handleSubmit = (e: React.FormEvent) => {
     e.preventDefault();
     toast.success("Nachricht gesendet", {
@@ -19,8 +22,8 @@ const Kontakt = () => {
   return (
     <>
       <SchemaMarkup 
-        title="Kontakt - Hausarztpraxis Dr. Ismail"
-        description="Kontaktieren Sie die Hausarztpraxis Dr. Ismail in Münster. Ostmarkstraße 56, 48145 Münster. Tel: 0251/246624"
+        title="Kontakt"
+        description="Kontaktieren Sie uns für Fragen rund um Termine und Patientenservices."
       />
       
       <div className="container mx-auto px-4 py-16">
@@ -106,9 +109,7 @@ const Kontakt = () => {
                   <div>
                     <p className="font-medium">Praxisadresse</p>
                     <p className="text-sm text-muted-foreground">
-                      Ostmarkstraße 56<br />
-                      48145 Münster<br />
-                      Deutschland 🇩🇪
+                      {tenant?.address || "—"}
                     </p>
                   </div>
                 </div>
@@ -117,9 +118,7 @@ const Kontakt = () => {
                   <Phone className="h-5 w-5 text-secondary flex-shrink-0 mt-0.5" />
                   <div>
                     <p className="font-medium">Telefon</p>
-                    <p className="text-sm text-muted-foreground">
-                      0251 / 246624
-                    </p>
+                    <p className="text-sm text-muted-foreground">{tenant?.phone || "—"}</p>
                   </div>
                 </div>
 
@@ -127,9 +126,7 @@ const Kontakt = () => {
                   <Mail className="h-5 w-5 text-secondary flex-shrink-0 mt-0.5" />
                   <div>
                     <p className="font-medium">E-Mail</p>
-                    <p className="text-sm text-muted-foreground">
-                      info@hausarztai.de
-                    </p>
+                    <p className="text-sm text-muted-foreground">{tenant?.email || "—"}</p>
                   </div>
                 </div>
 
@@ -155,8 +152,7 @@ const Kontakt = () => {
                   <p className="text-sm text-muted-foreground">Karte (UI-Platzhalter)</p>
                 </div>
                     <p className="text-sm text-muted-foreground">
-                      Unsere Praxis befindet sich im Herzen von Münster, Ostmarkstraße 56.
-                      Parkplätze sind in der Nähe vorhanden. 🚗
+                      Unsere Praxis ist gut erreichbar. Parkplätze sind in der Nähe vorhanden.
                     </p>
               </CardContent>
             </Card>

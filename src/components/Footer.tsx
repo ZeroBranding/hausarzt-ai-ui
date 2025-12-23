@@ -1,8 +1,17 @@
 import { Link } from "react-router-dom";
 import { Mail, Phone, MapPin, Clock } from "lucide-react";
-import logo from "@/assets/logo.png";
+import logo from "@/assets/gcz-mark.svg";
+import { useTenant } from "@/contexts/TenantContext";
 
 const Footer = () => {
+  const { tenant, branding, scheduling } = useTenant();
+
+  const openingHoursText = (() => {
+    if (!scheduling?.opening_hours) return null;
+    // Minimaler, robuster Text (ohne harte Praxis-spezifische Inhalte)
+    return "Sprechzeiten: siehe Terminseite";
+  })();
+
   return (
     <footer className="bg-primary text-primary-foreground">
       <div className="container mx-auto px-4 py-12">
@@ -10,14 +19,20 @@ const Footer = () => {
           {/* Brand */}
           <div className="space-y-4">
             <div className="flex items-center space-x-3">
-              <img src={logo} alt="Hausarztpraxis Dr. Ismail Logo" className="h-10 w-10 rounded-lg bg-white p-1" />
+              <img
+                src={logo}
+                alt={branding?.logo_alt || "GCZ"}
+                className="h-10 w-10 rounded-lg bg-white p-1"
+              />
               <div className="flex flex-col">
-                <span className="font-bold leading-tight">Hausarztpraxis</span>
-                <span className="text-sm font-semibold leading-tight">Dr. Ismail</span>
+                <span className="font-bold leading-tight">{tenant?.practice_name || "GCZ"}</span>
+                {branding?.title ? (
+                  <span className="text-sm font-semibold leading-tight">{branding.title}</span>
+                ) : null}
               </div>
             </div>
             <p className="text-sm text-primary-foreground/80">
-              Ihre moderne Hausarztpraxis in Münster für zeitgemäße medizinische Betreuung. 🏥💙
+              {branding?.description || "Online-Terminbuchung und digitale Patientenservices."}
             </p>
           </div>
 
@@ -72,33 +87,45 @@ const Footer = () => {
 
           {/* Contact Info */}
           <div>
-            <h3 className="font-semibold mb-4">Kontakt 📞</h3>
+            <h3 className="font-semibold mb-4">Kontakt</h3>
             <ul className="space-y-3 text-sm">
               <li className="flex items-start space-x-2">
                 <MapPin className="h-4 w-4 mt-0.5 flex-shrink-0" />
                 <span className="text-primary-foreground/80">
-                  Ostmarkstraße 56<br />
-                  48145 Münster
+                  {tenant?.address || "—"}
                 </span>
               </li>
               <li className="flex items-center space-x-2">
                 <Phone className="h-4 w-4 flex-shrink-0" />
-                <a href="tel:+492512466 24" className="text-primary-foreground/80 hover:text-primary-foreground transition-smooth">
-                  0251 / 246624
-                </a>
+                {tenant?.phone ? (
+                  <a
+                    href={`tel:${tenant.phone.replace(/\s+/g, "")}`}
+                    className="text-primary-foreground/80 hover:text-primary-foreground transition-smooth"
+                  >
+                    {tenant.phone}
+                  </a>
+                ) : (
+                  <span className="text-primary-foreground/80">—</span>
+                )}
               </li>
               <li className="flex items-center space-x-2">
                 <Mail className="h-4 w-4 flex-shrink-0" />
-                <a href="mailto:info@hausarztai.de" className="text-primary-foreground/80 hover:text-primary-foreground transition-smooth">
-                  info@hausarztai.de
-                </a>
+                {tenant?.email ? (
+                  <a
+                    href={`mailto:${tenant.email}`}
+                    className="text-primary-foreground/80 hover:text-primary-foreground transition-smooth"
+                  >
+                    {tenant.email}
+                  </a>
+                ) : (
+                  <span className="text-primary-foreground/80">—</span>
+                )}
               </li>
               <li className="flex items-start space-x-2">
                 <Clock className="h-4 w-4 mt-0.5 flex-shrink-0" />
                 <div className="text-primary-foreground/80">
                   <p className="font-medium">Sprechzeiten:</p>
-                  <p className="text-xs">Mo-Di, Do-Fr: 08-12 & 15-18 Uhr</p>
-                  <p className="text-xs">Mi: 08-12 Uhr</p>
+                  <p className="text-xs">{openingHoursText || "—"}</p>
                 </div>
               </li>
             </ul>
@@ -115,7 +142,7 @@ const Footer = () => {
               <Link to="/datenschutz" className="hover:text-primary-foreground transition-smooth">
                 Datenschutz
               </Link>
-              <span>© 2025 Hausarztpraxis Dr. Ismail</span>
+              <span>{branding?.footer_text || "© 2025 GCZ"}</span>
             </div>
           </div>
         </div>

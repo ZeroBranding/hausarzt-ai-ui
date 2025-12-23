@@ -1,21 +1,23 @@
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import SchemaMarkup from "@/components/SchemaMarkup";
+import { useTenant } from "@/contexts/TenantContext";
 
 const Datenschutz = () => {
+  const { tenant } = useTenant();
+
   return (
     <>
-      <SchemaMarkup title="Datenschutz" description="Datenschutzerklärung Hausarztpraxis Dr. Ismail" />
+      <SchemaMarkup title="Datenschutz" description="Datenschutzerklärung" />
       <div className="container mx-auto px-4 py-16 max-w-4xl">
-        <h1 className="mb-8 text-4xl font-bold text-primary animate-fade-in-up">🔒 Datenschutzerklärung</h1>
+        <h1 className="mb-8 text-4xl font-bold text-primary animate-fade-in-up">Datenschutzerklärung</h1>
         
         <Card className="shadow-medium mb-6 animate-fade-in-up">
           <CardHeader><CardTitle>1. Verantwortlicher für die Datenverarbeitung</CardTitle></CardHeader>
           <CardContent className="space-y-2">
-            <p className="font-semibold">Hausarztpraxis Dr. Ismail</p>
-            <p>Dr. med. Ismail</p>
-            <p>Ostmarkstraße 56, 48145 Münster</p>
-            <p className="mt-3"><strong>Telefon:</strong> 0251 / 246624</p>
-            <p><strong>E-Mail:</strong> info@hausarztai.de</p>
+            <p className="font-semibold">{tenant?.practice_name || "—"}</p>
+            <p>{tenant?.address || "—"}</p>
+            <p className="mt-3"><strong>Telefon:</strong> {tenant?.phone || "—"}</p>
+            <p><strong>E-Mail:</strong> {tenant?.email || "—"}</p>
           </CardContent>
         </Card>
 
@@ -175,10 +177,9 @@ const Datenschutz = () => {
             <p className="text-sm text-muted-foreground mb-3">
               Wenn Sie Fragen zum Datenschutz haben, schreiben Sie uns bitte eine E-Mail oder wenden Sie sich direkt an die verantwortliche Person:
             </p>
-            <p className="font-semibold">Dr. med. Ismail</p>
-            <p className="text-sm">Hausarztpraxis Dr. Ismail</p>
-            <p className="text-sm">Ostmarkstraße 56, 48145 Münster</p>
-            <p className="text-sm mt-2"><strong>E-Mail:</strong> info@hausarztai.de</p>
+            <p className="font-semibold">{tenant?.practice_name || "—"}</p>
+            <p className="text-sm">{tenant?.address || "—"}</p>
+            <p className="text-sm mt-2"><strong>E-Mail:</strong> {tenant?.email || "—"}</p>
           </CardContent>
         </Card>
       </div>

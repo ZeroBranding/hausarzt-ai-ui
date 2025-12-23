@@ -3,19 +3,21 @@ import { Link, useLocation } from "react-router-dom";
 import { Menu, X, Calendar, User } from "lucide-react";
 import { Button } from "./ui/button";
 import { ThemeToggle } from "./ThemeToggle";
-import logo from "@/assets/logo.png";
+import logo from "@/assets/gcz-mark.svg";
+import { useTenant } from "@/contexts/TenantContext";
 
 const Header = () => {
   const [isMenuOpen, setIsMenuOpen] = useState(false);
   const location = useLocation();
+  const { tenant, branding } = useTenant();
 
   const isActive = (path: string) => location.pathname === path;
 
   const navLinks = [
-    { path: "/", label: "🏠 Startseite" },
-    { path: "/leistungen", label: "⚕️ Leistungen" },
-    { path: "/termin", label: "📅 Termin buchen" },
-    { path: "/kontakt", label: "📞 Kontakt" },
+    { path: "/", label: "Startseite" },
+    { path: "/leistungen", label: "Leistungen" },
+    { path: "/termin", label: "Termin buchen" },
+    { path: "/kontakt", label: "Kontakt" },
   ];
 
   return (
@@ -23,10 +25,20 @@ const Header = () => {
       <div className="container mx-auto px-4">
         <div className="flex h-16 items-center justify-between">
           <Link to="/" className="flex items-center space-x-3 hover-scale group">
-            <img src={logo} alt="Hausarztpraxis Dr. Ismail Logo" className="h-12 w-12 rounded-lg transition-transform group-hover:rotate-6" />
+            <img
+              src={logo}
+              alt={branding?.logo_alt || "GCZ"}
+              className="h-12 w-12 rounded-lg transition-transform group-hover:rotate-6"
+            />
             <div className="flex flex-col">
-              <span className="text-lg font-bold text-primary leading-tight">Hausarztpraxis</span>
-              <span className="text-sm font-semibold text-secondary leading-tight">Dr. Ismail</span>
+              <span className="text-lg font-bold text-primary leading-tight">
+                {tenant?.practice_name || "GCZ"}
+              </span>
+              {branding?.title ? (
+                <span className="text-sm font-semibold text-secondary leading-tight">
+                  {branding.title}
+                </span>
+              ) : null}
             </div>
           </Link>
 
@@ -52,13 +64,13 @@ const Header = () => {
             <Link to="/login">
               <Button variant="ghost" size="sm" className="transition-smooth hover-scale">
                 <User className="mr-2 h-4 w-4" />
-                🔐 Anmelden
+                Anmelden
               </Button>
             </Link>
             <Link to="/termin">
               <Button size="sm" className="medical-gradient hover-scale shadow-medium">
                 <Calendar className="mr-2 h-4 w-4" />
-                📅 Termin buchen
+                Termin buchen
               </Button>
             </Link>
           </div>
@@ -99,13 +111,13 @@ const Header = () => {
               <Link to="/login" onClick={() => setIsMenuOpen(false)}>
                 <Button variant="outline" className="w-full hover-scale">
                   <User className="mr-2 h-4 w-4" />
-                  🔐 Anmelden
+                  Anmelden
                 </Button>
               </Link>
               <Link to="/termin" onClick={() => setIsMenuOpen(false)}>
                 <Button className="w-full medical-gradient hover-scale shadow-medium">
                   <Calendar className="mr-2 h-4 w-4" />
-                  📅 Termin buchen
+                  Termin buchen
                 </Button>
               </Link>
             </div>

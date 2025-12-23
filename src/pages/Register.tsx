@@ -1,16 +1,19 @@
 import { useState } from "react";
-import { Link } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { Checkbox } from "@/components/ui/checkbox";
-import { UserPlus, AlertCircle } from "lucide-react";
+import { UserPlus, AlertCircle, Loader2 } from "lucide-react";
 import { Alert, AlertDescription } from "@/components/ui/alert";
 import { toast } from "sonner";
 import SchemaMarkup from "@/components/SchemaMarkup";
+import { authAPI } from "@/lib/api";
 
 const Register = () => {
+  const navigate = useNavigate();
+  const [isLoading, setIsLoading] = useState(false);
   const [formData, setFormData] = useState({
     firstName: "",
     lastName: "",
@@ -20,9 +23,9 @@ const Register = () => {
     acceptTerms: false
   });
 
-  const handleSubmit = (e: React.FormEvent) => {
+  const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
-    
+
     if (formData.password !== formData.confirmPassword) {
       toast.error("Passwörter stimmen nicht überein");
       return;
@@ -33,9 +36,27 @@ const Register = () => {
       return;
     }
 
-    toast.success("Registrierung erfolgreich (UI-Demo)", {
-      description: "Dies ist eine Demo-Oberfläche. Keine Daten werden gespeichert."
-    });
+    setIsLoading(true);
+    try {
+      await authAPI.register({
+        email: formData.email,
+        password: formData.password,
+        first_name: formData.firstName,
+        last_name: formData.lastName,
+      });
+
+      toast.success("Registrierung erfolgreich!", {
+        description: "Bitte prüfen Sie Ihre E-Mail für die Bestätigung."
+      });
+      navigate("/login");
+    } catch (error) {
+      console.error("Registration error:", error);
+      toast.error("Registrierung fehlgeschlagen", {
+        description: error instanceof Error ? error.message : "Unbekannter Fehler"
+      });
+    } finally {
+      setIsLoading(false);
+    }
   };
 
   const handleChange = (field: string, value: string | boolean) => {
@@ -46,7 +67,7 @@ const Register = () => {
     <>
       <SchemaMarkup 
         title="Registrierung"
-        description="Erstellen Sie Ihr persönliches Patientenkonto bei HausarztAI.de - einfach, schnell und sicher."
+        description="Erstellen Sie Ihr persönliches Patientenkonto - einfach, schnell und sicher."
       />
       
       <div className="container mx-auto px-4 py-16">
@@ -61,13 +82,6 @@ const Register = () => {
             </p>
           </div>
 
-          <Alert className="mb-6 border-secondary/50 bg-secondary/10">
-            <AlertCircle className="h-4 w-4 text-secondary" />
-            <AlertDescription>
-              <strong>UI-Hinweis:</strong> Diese Oberfläche ist eine Darstellung ohne Backend.
-              Keine Daten werden tatsächlich gespeichert oder versendet.
-            </AlertDescription>
-          </Alert>
 
           <Card className="shadow-medium">
             <CardHeader>
@@ -156,9 +170,13 @@ const Register = () => {
                   </Label>
                 </div>
 
-                <Button type="submit" className="w-full medical-gradient" size="lg">
-                  <UserPlus className="mr-2 h-5 w-5" />
-                  Registrieren
+                <Button type="submit" className="w-full medical-gradient" size="lg" disabled={isLoading}>
+                  {isLoading ? (
+                    <Loader2 className="mr-2 h-5 w-5 animate-spin" />
+                  ) : (
+                    <UserPlus className="mr-2 h-5 w-5" />
+                  )}
+                  {isLoading ? "Registrierung läuft..." : "Registrieren"}
                 </Button>
 
                 <p className="text-center text-sm text-muted-foreground">

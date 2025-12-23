@@ -1,73 +1,62 @@
-# Welcome to your Lovable project
+# Praxis-WebSystem Frontend
 
-## Project info
+## Übersicht
 
-**URL**: https://lovable.dev/projects/ed86e0b8-366b-4574-a16d-db9d2019235f
+Das Frontend des Praxis-Websystems ist eine moderne React-Anwendung für die Verwaltung von Arztterminen, Patientendaten und Kommunikation.
 
-## How can I edit this code?
+## Technologien
 
-There are several ways of editing your application.
+- **Vite** - Build-Tool und Entwicklungs-Server
+- **TypeScript** - Typensichere JavaScript-Entwicklung
+- **React** - UI-Framework
+- **shadcn-ui** - Komponenten-Bibliothek
+- **Tailwind CSS** - Utility-First CSS Framework
+- **React Router** - Client-side Routing
+- **React Hook Form** - Formular-Verwaltung
+- **Zod** - Schema-Validierung
 
-**Use Lovable**
+## Lokale Entwicklung
 
-Simply visit the [Lovable Project](https://lovable.dev/projects/ed86e0b8-366b-4574-a16d-db9d2019235f) and start prompting.
+### Voraussetzungen
 
-Changes made via Lovable will be committed automatically to this repo.
+- Node.js (Version 18 oder höher)
+- npm oder yarn
 
-**Use your preferred IDE**
+### Installation
 
-If you want to work locally using your own IDE, you can clone this repo and push changes. Pushed changes will also be reflected in Lovable.
+```bash
+# Abhängigkeiten installieren
+npm install
 
-The only requirement is having Node.js & npm installed - [install with nvm](https://github.com/nvm-sh/nvm#installing-and-updating)
-
-Follow these steps:
-
-```sh
-# Step 1: Clone the repository using the project's Git URL.
-git clone <YOUR_GIT_URL>
-
-# Step 2: Navigate to the project directory.
-cd <YOUR_PROJECT_NAME>
-
-# Step 3: Install the necessary dependencies.
-npm i
-
-# Step 4: Start the development server with auto-reloading and an instant preview.
+# Entwicklungsserver starten
 npm run dev
 ```
 
-**Edit a file directly in GitHub**
+Der Server läuft standardmäßig auf `http://localhost:8080`
 
-- Navigate to the desired file(s).
-- Click the "Edit" button (pencil icon) at the top right of the file view.
-- Make your changes and commit the changes.
+### Verfügbare Scripts
 
-**Use GitHub Codespaces**
+- `npm run dev` - Startet den Entwicklungsserver
+- `npm run build` - Erstellt ein Produktions-Build
+- `npm run build:dev` - Erstellt ein Entwicklungs-Build
+- `npm run lint` - Führt ESLint aus
+- `npm run preview` - Zeigt das Produktions-Build lokal an
 
-- Navigate to the main page of your repository.
-- Click on the "Code" button (green button) near the top right.
-- Select the "Codespaces" tab.
-- Click on "New codespace" to launch a new Codespace environment.
-- Edit files directly within the Codespace and commit and push your changes once you're done.
+## Projektstruktur
 
-## What technologies are used for this project?
+```
+src/
+├── components/     # Wiederverwendbare UI-Komponenten
+├── pages/         # Seitenkomponenten
+├── hooks/         # Custom React Hooks
+├── lib/           # Hilfsfunktionen und Konfigurationen
+└── assets/        # Statische Assets
+```
 
-This project is built with:
+## Features
 
-- Vite
-- TypeScript
-- React
-- shadcn-ui
-- Tailwind CSS
-
-## How can I deploy this project?
-
-Simply open [Lovable](https://lovable.dev/projects/ed86e0b8-366b-4574-a16d-db9d2019235f) and click on Share -> Publish.
-
-## Can I connect a custom domain to my Lovable project?
-
-Yes, you can!
-
-To connect a domain, navigate to Project > Settings > Domains and click Connect Domain.
-
-Read more here: [Setting up a custom domain](https://docs.lovable.dev/features/custom-domain#custom-domain)
+- **Patientenverwaltung** - Registrierung, Login, Profil-Verwaltung
+- **Terminplanung** - Online-Terminbuchung und -Verwaltung
+- **Nachrichtensystem** - Sichere Kommunikation zwischen Arzt und Patienten
+- **Responsive Design** - Optimiert für Desktop und Mobile
+- **Barrierefreiheit** - WCAG-konforme Implementierung

@@ -1,11 +1,51 @@
+import { useState, useEffect } from "react";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
-import { Calendar, MessageSquare, User, FileText, Clock, AlertCircle } from "lucide-react";
+import { Calendar, MessageSquare, User, FileText, Clock, AlertCircle, Loader2, CheckCircle, XCircle } from "lucide-react";
 import { Alert, AlertDescription } from "@/components/ui/alert";
 import SchemaMarkup from "@/components/SchemaMarkup";
+import { appointmentsAPI, messagesAPI, authAPI, apiUtils } from "@/lib/api";
+import { useTenant } from "@/contexts/TenantContext";
 
 const Patientenbereich = () => {
-  const upcomingAppointments = [
+  const { tenant } = useTenant();
+  const [appointments, setAppointments] = useState([]);
+  const [messages, setMessages] = useState([]);
+  const [loading, setLoading] = useState(true);
+  const [error, setError] = useState(null);
+  const [user, setUser] = useState(null);
+
+  useEffect(() => {
+    loadUserData();
+  }, []);
+
+  const loadUserData = async () => {
+    try {
+      setLoading(true);
+      setError(null);
+
+      // Lade Benutzerprofil
+      const userData = await authAPI.getProfile();
+      setUser(userData);
+
+      // Lade Termine
+      const appointmentsData = await appointmentsAPI.getUserAppointments();
+      setAppointments(appointmentsData.appointments || []);
+
+      // Lade Nachrichten
+      const messagesData = await messagesAPI.getMessages();
+      setMessages(messagesData || []);
+
+    } catch (err) {
+      console.error('Fehler beim Laden der Daten:', err);
+      setError('Fehler beim Laden der Daten. Bitte versuchen Sie es später erneut.');
+    } finally {
+      setLoading(false);
+    }
+  };
+
+  // Demo-Daten als Fallback
+  const demoAppointments = [
     {
       date: "15. Januar 2025",
       time: "10:00 Uhr",
@@ -20,9 +60,9 @@ const Patientenbereich = () => {
     }
   ];
 
-  const messages = [
+  const demoMessages = [
     {
-      from: "Praxis HausarztAI",
+      from: tenant?.practice_name ? `Praxis ${tenant.practice_name}` : "Praxis",
       subject: "Laborergebnisse verfügbar",
       date: "Vor 2 Tagen",
       unread: true
@@ -52,13 +92,32 @@ const Patientenbereich = () => {
           </p>
         </div>
 
-        <Alert className="mb-8 border-secondary/50 bg-secondary/10">
-          <AlertCircle className="h-4 w-4 text-secondary" />
+        {error && (
+          <Alert className="mb-8 border-red-500/50 bg-red-500/10">
+            <XCircle className="h-4 w-4 text-red-500" />
+            <AlertDescription>
+              <strong>Verbindungsfehler:</strong> {error}
+            </AlertDescription>
+          </Alert>
+        )}
+
+        {!apiUtils.isAuthenticated() && (
+          <Alert className="mb-8 border-yellow-500/50 bg-yellow-500/10">
+            <AlertCircle className="h-4 w-4 text-yellow-500" />
+            <AlertDescription>
+              <strong>Nicht angemeldet:</strong> Bitte melden Sie sich an, um Ihre persönlichen Daten zu sehen.
+            </AlertDescription>
+          </Alert>
+        )}
+
+        {apiUtils.isAuthenticated() && !error && (
+          <Alert className="mb-8 border-green-500/50 bg-green-500/10">
+            <CheckCircle className="h-4 w-4 text-green-500" />
           <AlertDescription>
-            <strong>Demo-Dashboard:</strong> Dies ist eine UI-Darstellung ohne echte Datenlogik.
-            Alle angezeigten Daten sind Beispiele zur Demonstration der Oberfläche.
+              <strong>Live-Daten:</strong> Dashboard zeigt Ihre echten Termine und Nachrichten.
           </AlertDescription>
         </Alert>
+        )}
 
         <div className="grid gap-6 lg:grid-cols-3">
           {/* Main Content */}
@@ -74,18 +133,33 @@ const Patientenbereich = () => {
                     </CardTitle>
                     <CardDescription>Ihre nächsten Arztbesuche</CardDescription>
                   </div>
-                  <Button className="turquoise-gradient">Neuer Termin</Button>
+                  <Button
+                    className="turquoise-gradient"
+                    onClick={() => window.location.href = '/termin'}
+                  >
+                    Neuer Termin
+                  </Button>
                 </div>
               </CardHeader>
               <CardContent className="space-y-4">
-                {upcomingAppointments.map((appointment, index) => (
+                {loading ? (
+                  <div className="flex items-center justify-center py-8">
+                    <Loader2 className="h-6 w-6 animate-spin mr-2" />
+                    <span>Termine werden geladen...</span>
+                  </div>
+                ) : (
+                  (apiUtils.isAuthenticated() && appointments.length > 0 ? appointments : demoAppointments).map((appointment, index) => (
                   <div
                     key={index}
                     className="flex items-start justify-between rounded-lg border border-border p-4 hover:shadow-soft transition-smooth"
                   >
                     <div className="space-y-1">
-                      <p className="font-semibold text-foreground">{appointment.type}</p>
-                      <p className="text-sm text-muted-foreground">{appointment.doctor}</p>
+                        <p className="font-semibold text-foreground">
+                          {appointment.reason || appointment.type || "Termin"}
+                        </p>
+                        <p className="text-sm text-muted-foreground">
+                          {appointment.doctor_name || appointment.doctor || "Arzt"}
+                        </p>
                       <div className="flex items-center gap-4 text-sm text-muted-foreground">
                         <span className="flex items-center gap-1">
                           <Calendar className="h-4 w-4" />
@@ -99,7 +173,8 @@ const Patientenbereich = () => {
                     </div>
                     <Button variant="outline" size="sm">Details</Button>
                   </div>
-                ))}
+                  ))
+                )}
               </CardContent>
             </Card>
 
@@ -118,7 +193,13 @@ const Patientenbereich = () => {
                 </div>
               </CardHeader>
               <CardContent className="space-y-3">
-                {messages.map((message, index) => (
+                {loading ? (
+                  <div className="flex items-center justify-center py-8">
+                    <Loader2 className="h-6 w-6 animate-spin mr-2" />
+                    <span>Nachrichten werden geladen...</span>
+                  </div>
+                ) : (
+                  (apiUtils.isAuthenticated() && messages.length > 0 ? messages : demoMessages).map((message, index) => (
                   <div
                     key={index}
                     className={`flex items-start justify-between rounded-lg border p-4 transition-smooth hover:shadow-soft ${
@@ -127,17 +208,24 @@ const Patientenbereich = () => {
                   >
                     <div className="space-y-1 flex-1">
                       <div className="flex items-center gap-2">
-                        <p className="font-semibold text-foreground">{message.subject}</p>
+                          <p className="font-semibold text-foreground">
+                            {message.subject || "Nachricht"}
+                          </p>
                         {message.unread && (
                           <span className="inline-flex h-2 w-2 rounded-full bg-secondary"></span>
                         )}
                       </div>
-                      <p className="text-sm text-muted-foreground">{message.from}</p>
-                      <p className="text-xs text-muted-foreground">{message.date}</p>
+                        <p className="text-sm text-muted-foreground">
+                          {message.sender || message.from || "Praxis"}
+                        </p>
+                        <p className="text-xs text-muted-foreground">
+                          {message.created_at ? new Date(message.created_at).toLocaleDateString('de-DE') : message.date || "Unbekannt"}
+                        </p>
                     </div>
                     <Button variant="ghost" size="sm">Öffnen</Button>
                   </div>
-                ))}
+                  ))
+                )}
               </CardContent>
             </Card>
           </div>

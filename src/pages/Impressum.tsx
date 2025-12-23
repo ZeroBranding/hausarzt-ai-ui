@@ -1,22 +1,23 @@
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import SchemaMarkup from "@/components/SchemaMarkup";
+import { useTenant } from "@/contexts/TenantContext";
 
 const Impressum = () => {
+  const { tenant } = useTenant();
+
   return (
     <>
-      <SchemaMarkup title="Impressum" description="Impressum Hausarztpraxis Dr. Ismail" />
+      <SchemaMarkup title="Impressum" description="Impressum" />
       <div className="container mx-auto px-4 py-16 max-w-4xl">
-        <h1 className="mb-8 text-4xl font-bold text-primary animate-fade-in-up">⚖️ Impressum</h1>
+        <h1 className="mb-8 text-4xl font-bold text-primary animate-fade-in-up">Impressum</h1>
         
         <Card className="shadow-medium mb-6 animate-fade-in-up">
           <CardHeader><CardTitle>Angaben gemäß § 5 TMG</CardTitle></CardHeader>
           <CardContent className="space-y-2">
-            <p className="font-semibold text-lg">Hausarztpraxis Dr. Ismail</p>
-            <p>Dr. med. Ismail</p>
-            <p>Ostmarkstraße 56</p>
-            <p>48145 Münster</p>
-            <p className="mt-4"><strong>Telefon:</strong> 0251 / 246624</p>
-            <p><strong>E-Mail:</strong> info@hausarztai.de</p>
+            <p className="font-semibold text-lg">{tenant?.practice_name || "—"}</p>
+            <p>{tenant?.address || "—"}</p>
+            <p className="mt-4"><strong>Telefon:</strong> {tenant?.phone || "—"}</p>
+            <p><strong>E-Mail:</strong> {tenant?.email || "—"}</p>
           </CardContent>
         </Card>
 

@@ -3,8 +3,23 @@ import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
 import { Calendar, Clock, MessageSquare, Shield, Video, CheckCircle } from "lucide-react";
 import SchemaMarkup from "@/components/SchemaMarkup";
+import { useTenant } from "@/contexts/TenantContext";
 
 const Home = () => {
+  const { tenant, branding, loading } = useTenant();
+
+  // Lade-Status
+  if (loading || !tenant || !branding) {
+    return (
+      <div className="min-h-screen flex items-center justify-center">
+        <div className="text-center">
+          <div className="animate-spin rounded-full h-8 w-8 border-b-2 border-primary mx-auto mb-4"></div>
+          <p className="text-muted-foreground">Lade Praxis-Daten...</p>
+        </div>
+      </div>
+    );
+  }
+
   const features = [
     {
       icon: Calendar,
@@ -41,26 +56,26 @@ const Home = () => {
   const steps = [
     {
       number: "01",
-      title: "Registrieren",
-      description: "Erstellen Sie Ihr persönliches Patientenkonto in wenigen Minuten."
+      title: "Termin wählen",
+      description: "Wählen Sie Ihren Wunschtermin direkt aus unserem Kalender."
     },
     {
       number: "02",
-      title: "Termin buchen",
-      description: "Wählen Sie einen passenden Termin aus unserem Kalender."
+      title: "Registrieren",
+      description: "Erstellen Sie Ihr Patientenkonto oder melden Sie sich an."
     },
     {
       number: "03",
-      title: "Beratung erhalten",
-      description: "Erhalten Sie professionelle medizinische Betreuung."
+      title: "Bestätigen",
+      description: "Bestätigen Sie Ihren Termin und erhalten Sie Ihre Buchung."
     }
   ];
 
   return (
     <>
-      <SchemaMarkup 
-        title="Hausarztpraxis Dr. Ismail - Münster"
-        description="Hausarztpraxis Dr. Ismail in Münster: Online-Terminbuchung, moderne medizinische Versorgung. Ostmarkstraße 56, 48145 Münster. Tel: 0251/246624"
+      <SchemaMarkup
+        title={branding.title}
+        description={branding.description}
       />
       
       {/* Hero Section */}
@@ -69,24 +84,24 @@ const Home = () => {
         <div className="container relative mx-auto px-4">
           <div className="mx-auto max-w-3xl text-center">
             <h1 className="mb-6 text-4xl font-bold text-white md:text-6xl animate-fade-in">
-              Hausarztpraxis Dr. Ismail
+              {tenant.practice_name}
             </h1>
             <p className="mb-4 text-xl text-white/90 md:text-2xl animate-fade-in" style={{ animationDelay: "0.1s" }}>
-              Moderne medizinische Versorgung in Münster 🏥
+              {branding.hero_title}
             </p>
             <p className="mb-8 text-lg text-white/80 animate-fade-in" style={{ animationDelay: "0.2s" }}>
-              Online-Terminbuchung • Persönliche Betreuung • Moderne Diagnostik
+              {branding.hero_subtitle}
             </p>
             <div className="flex flex-col sm:flex-row gap-4 justify-center animate-fade-in" style={{ animationDelay: "0.3s" }}>
               <Link to="/termin">
                 <Button size="lg" className="bg-white text-primary hover:bg-white/90 shadow-strong">
                   <Calendar className="mr-2 h-5 w-5" />
-                  Termin vereinbaren
+                  Jetzt Termin buchen
                 </Button>
               </Link>
-              <Link to="/register">
+              <Link to="/termin">
                 <Button size="lg" variant="outline" className="bg-white/10 text-white border-white hover:bg-white/20 backdrop-blur-sm">
-                  Jetzt registrieren
+                  Freie Termine ansehen
                 </Button>
               </Link>
             </div>
@@ -159,14 +174,15 @@ const Home = () => {
       <section className="py-20 medical-gradient">
         <div className="container mx-auto px-4 text-center">
           <h2 className="mb-4 text-3xl font-bold text-white md:text-4xl">
-            Bereit für moderne Medizin?
+            Bereit für Ihren Termin?
           </h2>
           <p className="mb-8 text-lg text-white/90 max-w-2xl mx-auto">
-            Registrieren Sie sich jetzt und erleben Sie medizinische Betreuung im digitalen Zeitalter.
+            Buchen Sie jetzt Ihren Wunschtermin - einfach, schnell und bequem online.
           </p>
-          <Link to="/register">
+          <Link to="/termin">
             <Button size="lg" className="bg-white text-primary hover:bg-white/90 shadow-strong">
-              Kostenlos registrieren
+              <Calendar className="mr-2 h-5 w-5" />
+              Termin buchen
             </Button>
           </Link>
         </div>
