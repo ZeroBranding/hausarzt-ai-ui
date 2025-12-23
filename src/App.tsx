@@ -31,9 +31,17 @@ const BackendConnectivityCheck = ({ children }: { children: React.ReactNode }) =
     const checkBackend = async () => {
       try {
         const base = apiUtils.getApiBaseUrl();
-        const response = await fetch(`${base}/health`, { cache: "no-store" });
+        const controller = new AbortController();
+        const timeoutId = setTimeout(() => controller.abort(), 3000); // 3 Sekunden Timeout
+        
+        const response = await fetch(`${base}/health`, { 
+          cache: "no-store",
+          signal: controller.signal,
+        });
+        clearTimeout(timeoutId);
         setBackendAvailable(response.ok);
       } catch {
+        // Backend nicht verfügbar - nicht blockieren, nur Warnung anzeigen
         setBackendAvailable(false);
       }
     };
@@ -41,37 +49,20 @@ const BackendConnectivityCheck = ({ children }: { children: React.ReactNode }) =
     checkBackend();
   }, []);
 
-  if (backendAvailable === false) {
-    return (
-      <div className="min-h-screen flex items-center justify-center bg-background">
-        <div className="text-center p-8 max-w-md">
-          <AlertCircle className="h-16 w-16 text-red-500 mx-auto mb-4" />
-          <h1 className="text-2xl font-bold text-foreground mb-4">
-            Backend nicht verfügbar
-          </h1>
-          <p className="text-muted-foreground mb-4">
-            Das Backend-System ist derzeit nicht erreichbar. Bitte prüfen Sie die Backend-URL und starten Sie das Backend.
-          </p>
-          <code className="block bg-muted p-3 rounded text-sm mb-4">
-            VITE_API_URL (Lovable Build-ENV) muss auf &lt;backend&gt;/api zeigen
-          </code>
+  // Nicht blockieren - immer rendern, Warnung nur als Banner
+  return (
+    <>
+      {backendAvailable === false && (
+        <div className="bg-yellow-500/10 border-b border-yellow-500/50 px-4 py-2 text-sm text-yellow-700 dark:text-yellow-400">
+          <div className="container mx-auto flex items-center gap-2">
+            <AlertCircle className="h-4 w-4" />
+            <span>Backend nicht verfügbar - einige Funktionen sind möglicherweise eingeschränkt.</span>
+          </div>
         </div>
-      </div>
-    );
-  }
-
-  if (backendAvailable === null) {
-    return (
-      <div className="min-h-screen flex items-center justify-center">
-        <div className="text-center">
-          <div className="animate-spin rounded-full h-8 w-8 border-b-2 border-primary mx-auto mb-4"></div>
-          <p className="text-muted-foreground">Prüfe Backend-Verfügbarkeit...</p>
-        </div>
-      </div>
-    );
-  }
-
-  return <>{children}</>;
+      )}
+      {children}
+    </>
+  );
 };
 
 const App = () => (

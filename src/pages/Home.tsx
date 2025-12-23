@@ -6,10 +6,34 @@ import SchemaMarkup from "@/components/SchemaMarkup";
 import { useTenant } from "@/contexts/TenantContext";
 
 const Home = () => {
-  const { tenant, branding, loading } = useTenant();
+  const { tenant, branding, loading, error } = useTenant();
 
-  // Lade-Status
-  if (loading || !tenant || !branding) {
+  // Fallback-Daten für Offline-Modus oder Backend-Fehler
+  const fallbackTenant = {
+    practice_name: "Hausarztpraxis",
+    address: "",
+    phone: "",
+    email: "",
+    domain: "",
+  };
+
+  const fallbackBranding = {
+    title: "Hausarztpraxis - Moderne medizinische Versorgung",
+    description: "Online-Terminbuchung und moderne medizinische Betreuung",
+    footer_text: "",
+    logo_alt: "Hausarztpraxis Logo",
+    primary_color: "#2c5282",
+    hero_title: "Moderne medizinische Versorgung",
+    hero_subtitle: "Online-Terminbuchung • Persönliche Betreuung • Moderne Diagnostik",
+    schema_title: "Hausarztpraxis - Moderne medizinische Versorgung",
+  };
+
+  // Verwende Fallback-Daten wenn keine Daten geladen wurden (nach Timeout/Fehler)
+  const displayTenant = tenant || fallbackTenant;
+  const displayBranding = branding || fallbackBranding;
+
+  // Zeige Loader nur während des initialen Ladens (max. 10 Sekunden)
+  if (loading && !error && !tenant && !branding) {
     return (
       <div className="min-h-screen flex items-center justify-center">
         <div className="text-center">
@@ -74,8 +98,8 @@ const Home = () => {
   return (
     <>
       <SchemaMarkup
-        title={branding.title}
-        description={branding.description}
+        title={displayBranding.title}
+        description={displayBranding.description}
       />
       
       {/* Hero Section */}
@@ -84,13 +108,13 @@ const Home = () => {
         <div className="container relative mx-auto px-4">
           <div className="mx-auto max-w-3xl text-center">
             <h1 className="mb-6 text-4xl font-bold text-white md:text-6xl animate-fade-in">
-              {tenant.practice_name}
+              {displayTenant.practice_name}
             </h1>
             <p className="mb-4 text-xl text-white/90 md:text-2xl animate-fade-in" style={{ animationDelay: "0.1s" }}>
-              {branding.hero_title}
+              {displayBranding.hero_title}
             </p>
             <p className="mb-8 text-lg text-white/80 animate-fade-in" style={{ animationDelay: "0.2s" }}>
-              {branding.hero_subtitle}
+              {displayBranding.hero_subtitle}
             </p>
             <div className="flex flex-col sm:flex-row gap-4 justify-center animate-fade-in" style={{ animationDelay: "0.3s" }}>
               <Link to="/termin">

@@ -75,6 +75,11 @@ export const TenantProvider: React.FC<TenantProviderProps> = ({ children }) => {
     } catch (err) {
       console.error('Failed to load tenant data:', err);
       setError('Fehler beim Laden der Praxis-Daten');
+      // Fallback: Leere Daten setzen, damit UI nicht blockiert wird
+      // Komponenten können dann mit Fallback-Daten arbeiten
+      setTenant(null);
+      setBranding(null);
+      setScheduling(null);
     } finally {
       setLoading(false);
     }
