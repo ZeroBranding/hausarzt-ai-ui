@@ -9,7 +9,7 @@ import { UserPlus, AlertCircle, Loader2 } from "lucide-react";
 import { Alert, AlertDescription } from "@/components/ui/alert";
 import { toast } from "sonner";
 import SchemaMarkup from "@/components/SchemaMarkup";
-import { authAPI } from "@/lib_api";
+import { authAPI } from "@/lib/utils";
 
 const Register = () => {
   const navigate = useNavigate();
