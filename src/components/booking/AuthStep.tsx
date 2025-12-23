@@ -8,7 +8,7 @@ import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
 import { useBooking } from '@/contexts/BookingContext';
 import { format, parse } from 'date-fns';
 import { de } from 'date-fns/locale';
-import { authAPI } from '@/lib_api';
+import { authAPI } from '@/lib/utils';
 
 // API Base URL - bei Proxy leer lassen, sonst volle URL
 const API_BASE = '';

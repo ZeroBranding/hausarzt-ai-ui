@@ -6,7 +6,7 @@ import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
 import { BrowserRouter, Routes, Route } from "react-router-dom";
 import { AlertCircle } from "lucide-react";
 import { TenantProvider } from "./contexts/TenantContext";
-import { apiUtils } from "@/lib/api";
+import { apiUtils } from "@/lib/utils";
 import Layout from "./components/Layout";
 import ProtectedRoute from "./components/ProtectedRoute";
 import Home from "./pages/Home";

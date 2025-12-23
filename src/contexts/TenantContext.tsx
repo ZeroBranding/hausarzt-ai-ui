@@ -1,5 +1,5 @@
 import React, { createContext, useContext, useState, useEffect, ReactNode } from 'react';
-import { tenantAPI } from '@/lib_api';
+import { tenantAPI } from '@/lib/utils';
 
 interface TenantData {
   practice_name: string;

@@ -1,6 +1,6 @@
 import { ReactNode } from 'react';
 import { Navigate, useLocation } from 'react-router-dom';
-import { apiUtils } from '@/lib_api';
+import { apiUtils } from '@/lib/utils';
 
 interface ProtectedRouteProps {
   children: ReactNode;

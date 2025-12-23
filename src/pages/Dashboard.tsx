@@ -3,7 +3,7 @@ import { Button } from "@/components/ui/button";
 import { User, LogOut, Calendar, MessageSquare } from "lucide-react";
 import { Link, useNavigate } from "react-router-dom";
 import SchemaMarkup from "@/components/SchemaMarkup";
-import { authAPI, apiUtils } from "@/lib_api";
+import { authAPI, apiUtils } from "@/lib/utils";
 
 const Dashboard = () => {
   const navigate = useNavigate();
