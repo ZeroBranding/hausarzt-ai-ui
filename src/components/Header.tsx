@@ -1,0 +1,131 @@
+import { useState } from "react";
+import { Link, useLocation } from "react-router-dom";
+import { Menu, X, Calendar, User } from "lucide-react";
+import { Button } from "./ui/button";
+import { ThemeToggle } from "./ThemeToggle";
+import logo from "@/assets/gcz-mark.svg";
+import { useTenant } from "@/contexts/TenantContext";
+
+const Header = () => {
+  const [isMenuOpen, setIsMenuOpen] = useState(false);
+  const location = useLocation();
+  const { tenant, branding } = useTenant();
+
+  const isActive = (path: string) => location.pathname === path;
+
+  const navLinks = [
+    { path: "/", label: "Startseite" },
+    { path: "/leistungen", label: "Leistungen" },
+    { path: "/termin", label: "Termin buchen" },
+    { path: "/kontakt", label: "Kontakt" },
+  ];
+
+  return (
+    <header className="sticky top-0 z-50 w-full border-b border-border bg-background/95 backdrop-blur supports-[backdrop-filter]:bg-background/80 transition-smooth">
+      <div className="container mx-auto px-4">
+        <div className="flex h-16 items-center justify-between">
+          <Link to="/" className="flex items-center space-x-3 hover-scale group">
+            <img
+              src={logo}
+              alt={branding?.logo_alt || "GCZ"}
+              className="h-12 w-12 rounded-lg transition-transform group-hover:rotate-6"
+            />
+            <div className="flex flex-col">
+              <span className="text-lg font-bold text-primary leading-tight">
+                {tenant?.practice_name || "GCZ"}
+              </span>
+              {branding?.title ? (
+                <span className="text-sm font-semibold text-secondary leading-tight">
+                  {branding.title}
+                </span>
+              ) : null}
+            </div>
+          </Link>
+
+          {/* Desktop Navigation */}
+          <nav className="hidden md:flex items-center space-x-6">
+            {navLinks.map((link) => (
+              <Link
+                key={link.path}
+                to={link.path}
+                className={`text-sm font-medium transition-smooth hover:text-primary relative group ${
+                  isActive(link.path) ? "text-primary" : "text-foreground/70"
+                }`}
+              >
+                {link.label}
+                <span className={`absolute -bottom-1 left-0 w-0 h-0.5 bg-primary transition-all group-hover:w-full ${isActive(link.path) ? 'w-full' : ''}`}></span>
+              </Link>
+            ))}
+          </nav>
+
+          {/* Desktop CTA Buttons */}
+          <div className="hidden md:flex items-center space-x-2">
+            <ThemeToggle />
+            <Link to="/login">
+              <Button variant="ghost" size="sm" className="transition-smooth hover-scale">
+                <User className="mr-2 h-4 w-4" />
+                Anmelden
+              </Button>
+            </Link>
+            <Link to="/termin">
+              <Button size="sm" className="medical-gradient hover-scale shadow-medium">
+                <Calendar className="mr-2 h-4 w-4" />
+                Termin buchen
+              </Button>
+            </Link>
+          </div>
+
+          {/* Mobile Menu Button */}
+          <div className="flex md:hidden items-center space-x-2">
+            <ThemeToggle />
+            <button
+              className="md:hidden"
+              onClick={() => setIsMenuOpen(!isMenuOpen)}
+              aria-label="Menü öffnen/schließen"
+            >
+              {isMenuOpen ? (
+                <X className="h-6 w-6 text-foreground" />
+              ) : (
+                <Menu className="h-6 w-6 text-foreground" />
+              )}
+            </button>
+          </div>
+        </div>
+
+        {/* Mobile Navigation */}
+        {isMenuOpen && (
+          <nav className="md:hidden border-t border-border py-4 space-y-3 animate-slide-up">
+            {navLinks.map((link) => (
+              <Link
+                key={link.path}
+                to={link.path}
+                className={`block py-2 text-sm font-medium transition-smooth hover:text-primary ${
+                  isActive(link.path) ? "text-primary" : "text-foreground/70"
+                }`}
+                onClick={() => setIsMenuOpen(false)}
+              >
+                {link.label}
+              </Link>
+            ))}
+            <div className="pt-3 space-y-2">
+              <Link to="/login" onClick={() => setIsMenuOpen(false)}>
+                <Button variant="outline" className="w-full hover-scale">
+                  <User className="mr-2 h-4 w-4" />
+                  Anmelden
+                </Button>
+              </Link>
+              <Link to="/termin" onClick={() => setIsMenuOpen(false)}>
+                <Button className="w-full medical-gradient hover-scale shadow-medium">
+                  <Calendar className="mr-2 h-4 w-4" />
+                  Termin buchen
+                </Button>
+              </Link>
+            </div>
+          </nav>
+        )}
+      </div>
+    </header>
+  );
+};
+
+export default Header;
